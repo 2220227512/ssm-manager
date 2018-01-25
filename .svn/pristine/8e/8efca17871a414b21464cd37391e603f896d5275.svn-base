@@ -1,0 +1,44 @@
+package com.taotao.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.taotao.common.pojo.EUDataGridResult;
+import com.taotao.mapper.TbItemMapper;
+import com.taotao.po.TbItem;
+import com.taotao.po.TbItemExample;
+import com.taotao.service.ItemService;
+/**
+ * 商品接口实现
+ * @author Lsj
+ *
+ */
+@Service
+public class ItemServiceImpl implements ItemService {
+
+	@Autowired
+	private TbItemMapper itemMapper;
+	@Override
+	public TbItem getItemById(Long itemId) {
+		TbItem item=itemMapper.selectByPrimaryKey(itemId);
+		return item;
+	}
+	@Override
+	public EUDataGridResult findListByPageHelper(int page, int rows) {
+		TbItemExample example =new TbItemExample();
+		PageHelper.startPage(page, rows);
+		List<TbItem> items = itemMapper.selectByExample(example);
+		PageInfo<TbItem> info=new PageInfo<>(items);
+		Long total=info.getTotal();
+		
+		EUDataGridResult edgr =new EUDataGridResult();
+		edgr.setRows(items);
+		edgr.setTotal(total);
+		return edgr;
+	}
+
+}

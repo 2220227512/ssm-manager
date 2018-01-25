@@ -1,0 +1,56 @@
+package com.taotao.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.taotao.common.pojo.EUDataGridResult;
+import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.po.TbItem;
+import com.taotao.service.ItemService;
+
+
+/**
+ * 
+* <p>Title: ItemController</p>  
+* <p>Description: </p>  
+* @author 唯  
+* @date 2017-12-31
+ */
+@Controller
+public class ItemController {
+	
+	@Autowired
+	private ItemService itemService;
+	
+	
+	@RequestMapping("/item/{itemId}")
+	@ResponseBody
+	public TbItem getitem(@PathVariable Long itemId){
+		TbItem item=itemService.getItemById(itemId);
+		return item;
+	}
+	/**
+	 * 分页查询商品
+	 */
+	@RequestMapping("/item/list")
+	@ResponseBody
+	public EUDataGridResult findListByPageHelper(int page,int rows){
+		EUDataGridResult result=itemService.findListByPageHelper(page, rows);
+		return result;
+	}
+	
+
+	@RequestMapping("/item/save")
+	@ResponseBody
+	public TaotaoResult save(TbItem item,String desc,String itemParams)throws Exception{
+		System.out.println(item.toString());
+		TaotaoResult result= itemService.saveItem(item,desc,itemParams);
+		System.out.println(result.toString());
+		return result;
+		
+	}
+
+}

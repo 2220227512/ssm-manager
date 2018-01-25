@@ -1,0 +1,13 @@
+#FTP 相关配置
+#服务器ip
+Ftp_host=192.168.190.128
+#端口
+Ftp_port=21
+#用户名
+Ftp_username=ftpuser
+#密码
+Ftp_password=120021
+#默认路径
+Ftp_basePath=/home/ftpuser
+#上传图片路径
+Ftp_image_url=http://192.168.190.128

@@ -1,0 +1,31 @@
+package com.taotao.service.impl;
+
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.mapper.TbContentMapper;
+import com.taotao.po.TbContent;
+import com.taotao.service.ContentService;
+@Service
+public class ContentServiceImpl implements ContentService {
+
+	@Autowired
+	private TbContentMapper contentMapper;
+	@Override
+	public TaotaoResult insertContent(TbContent content) {
+		content.setUpdated(new Date());
+		content.setCreated(new Date());
+		if(content.getPic()==null){
+			content.setPic("http://192.168.190.128/2018/01/03/1514979137315598.jpg");
+		}
+       if(content.getPic2()==null){
+    	   content.setPic2("http://192.168.190.128/2018/01/03/1514979137315598.jpg");
+		}
+		contentMapper.insert(content);
+		return TaotaoResult.ok();
+	}
+
+}

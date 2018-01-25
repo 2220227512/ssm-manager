@@ -1,0 +1,62 @@
+package com.taotao.service.impl;
+
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.taotao.common.pojo.EUDataGridResult;
+import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.common.utils.IDUtils;
+import com.taotao.mapper.TbItemMapper;
+import com.taotao.po.TbItem;
+import com.taotao.po.TbItemExample;
+import com.taotao.service.ItemService;
+/**
+ * 商品接口实现
+ * @author Lsj
+ *
+ */
+@Service
+public class ItemServiceImpl implements ItemService {
+
+	@Autowired
+	private TbItemMapper itemMapper;
+	@Override
+	public TbItem getItemById(Long itemId) {
+		TbItem item=itemMapper.selectByPrimaryKey(itemId);
+		return item;
+	}
+	@Override
+	public EUDataGridResult findListByPageHelper(int page, int rows) {
+		TbItemExample example =new TbItemExample();
+		PageHelper.startPage(page, rows);
+		List<TbItem> items = itemMapper.selectByExample(example);
+		PageInfo<TbItem> info=new PageInfo<>(items);
+		Long total=info.getTotal();
+		
+		EUDataGridResult edgr =new EUDataGridResult();
+		edgr.setRows(items);
+		edgr.setTotal(total);
+		return edgr;
+	}
+	@Override
+	public TaotaoResult saveItem(TbItem item) {
+		
+		item.setId(IDUtils.genItemId());//设置id
+		item.setStatus((byte)1);     //设置状态
+		Date date=new Date();
+		item.setCreated(date);
+		item.setUpdated(date);
+		System.out.println(item.toString());
+		itemMapper.insert(item);
+		
+		return TaotaoResult.ok();
+	}
+	
+	
+
+}
